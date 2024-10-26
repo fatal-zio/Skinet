@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Core.Entities;
 using Core.Intefaces;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,7 @@ public class ProductRepository(StoreContext context) : IProductRepository
         return await context.Products.FindAsync(id);
     }
 
-    public async Task<IReadOnlyList<Product>> GetProductsAsync(string? brand, string? type)
+    public async Task<IReadOnlyList<Product>> GetProductsAsync(string? brand, string? type, string? sort)
     {
         var query = context.Products.AsQueryable();
 
@@ -37,6 +38,13 @@ public class ProductRepository(StoreContext context) : IProductRepository
 
         if (!string.IsNullOrWhiteSpace(type))
             query = query.Where(o => o.Type == type);
+
+        query = sort switch
+        {
+            "priceAsc" => query.OrderBy(o => o.Price),
+            "priceDesc" => query.OrderByDescending(o => o.Price),
+            _ => query.OrderBy(o => o.Name)
+        };
 
         return await query.ToListAsync();
     }
