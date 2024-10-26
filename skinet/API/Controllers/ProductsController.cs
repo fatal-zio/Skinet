@@ -11,9 +11,9 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts(string? brand, string? type)
         {
-            return Ok(await repository.GetProductsAsync());
+            return Ok(await repository.GetProductsAsync(brand, type));
         }
 
         [HttpGet("{id:int}")]
