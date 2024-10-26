@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Core.Entities;
 using Core.Intefaces;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,18 @@ namespace API.Controllers
                 NoContent() : 
                 BadRequest("Problem deleting the product");
         }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
+        {
+            return Ok(await repository.GetBrandsAsync());
+        } 
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
+        {
+            return Ok(await repository.GetTypesAsync());
+        } 
 
         private bool ProductExits(int id)
         {
